@@ -305,6 +305,7 @@ console.log('---------------- task 19 ------------');
 //     //         return a;
 //     //     }
 //     // };
+
 // };
 
 // console.log(isPrime(38));
@@ -346,7 +347,7 @@ console.log(divisibility(-5, 7));
 // Return the resulting string
 console.log('---------------- task 21 ------------');
 
-const insertB = (a: string, b: string): string => {
+const insertB = (a: string, b: string) => {
     return (a.match(/.{1,3}/g).join(b))
 }
 
@@ -394,9 +395,7 @@ console.log(element([7,2,1,6,3],1));
 // Return the result
 console.log('---------------- task 24 ------------');
 
-const removeThree = (a: number[]): number[] => {
-    return a.slice(3);
-}
+const removeThree = (a: number[]): number[] =>  a.slice(3);
 
 console.log(removeThree([1,2,3,4]));
 console.log(removeThree([5,4,3,2,1,0]));
@@ -594,9 +593,7 @@ interface Args {
     b: number
 }
 
-const sortedObjects = (args: Args[]): {}[] => {
-    return args.map(arg => arg.b).sort((a, b) => a - b);
-}
+const sortedObjects = (args: Args[]): {}[] => args.sort((a, b) => (a.b > b.b) ? 1 : -1);
 
 console.log(sortedObjects([{a:1,b:2},{a:5,b:4}]));
 console.log(sortedObjects([{a:2,b:10},{a:5,b:4}]));
@@ -671,15 +668,31 @@ console.log(range(2, 7));
 // { a: ['Alf', 'Alice'], b: ['Ben']}
 console.log('---------------- task 41 ------------');
 
+type ResultObj = {
+    [key: string]: string;
+}
 
+const groupStrings = (strArray: string[]) => {
+    let resultObj: ResultObj = {};
+  
+    for (let i = 0; i < strArray.length; i++) {
+        let currentWord = strArray[i];
+        let firstChar = currentWord[0].toLowerCase();
+        let innerArr = [];
+        if (resultObj[firstChar] === undefined) {
+            innerArr.push(currentWord);
+            return {resultObj,[firstChar]: innerArr};
+        } else {
+            return {resultObj,[firstChar]: firstChar};
+        }
+    }
+//   return resultObj
+}
 
-// const firstLetter = (strArray: string[]) => {
-// 
-// }
+console.log(groupStrings(['Alf', 'Alice', 'Ben']));
+console.log(groupStrings(['Ant', 'Bear', 'Bird']));
+console.log(groupStrings(['Berlin', 'Paris', 'Prague']));
 
-// console.log(firstLetter(['Alf', 'Alice', 'Ben']));
-// console.log(firstLetter(['Ant', 'Bear', 'Bird']));
-// console.log(firstLetter(['Berlin', 'Paris', 'Prague']));
 
 // Task 42
 // Write a function that takes an array with arbitrary elements and a number as arguments
@@ -701,6 +714,7 @@ const makeNewArr = (arr: (number | string | boolean)[], num: number) => {
 console.log(makeNewArr([1,2,3], 6));
 console.log(makeNewArr(['a','b'], 2));
 console.log(makeNewArr([null,false], 11));
+
 
 
 // Task 43 (page 20)
@@ -828,10 +842,8 @@ console.log(createObj('b'));
 // Return the object
 console.log('---------------- task 49 ------------');
 
-const createObject = (a: string, b: string): {} => {
-    return {
-        a: b,
-    }
+const createObject = (firstString: string, secondString: string) => {
+    return {[firstString]: secondString}
 }
 
 console.log(createObject('a','b'));
@@ -899,19 +911,18 @@ interface Task52 {
     y?: number,
 }
 
-// const sumObjValues = (obj: Task52) => {
-//     const nums: number[] = [];
-//     nums.push(Object.values(obj));
+const sumObjValues = (obj: Task52) => {
+    const nums = Object.values(obj);
 
-//     let sum: number = 0;
-//     nums.forEach(num => sum += num);
+    let sum: number = 0;
+    nums.forEach(num => sum += num);
 
-//     return sum;
-// }
+    return sum;
+}
 
-// console.log(sumObjValues({a:1,b:2,c:3}));
-// console.log(sumObjValues({j:9,i:2,x:3,z:4}));
-// console.log(sumObjValues({w:15,x:22,y:13}));
+console.log(sumObjValues({a:1,b:2,c:3}));       //6
+console.log(sumObjValues({j:9,i:2,x:3,z:4}));   //18
+console.log(sumObjValues({w:15,x:22,y:13}));    //50
 
 
 // Task 53
@@ -988,15 +999,13 @@ interface Task55 {
     y?: number,
 }
 
-const multiplyAB = (obj: Task55, num: number): {} => {
-    let values = Object.values(obj).map(x => x * num);
-    return values;
-    
+const multiplyValues = (obj: Task55, num: number) => {
+    return Object.fromEntries(Object.entries(obj).map(entry => [entry[0], entry[1] * num]))
 }
 
-console.log(multiplyAB({a:1,b:2,c:3},3));
-console.log(multiplyAB({j:9,i:2,x:3,z:4},10));
-console.log(multiplyAB({w:15,x:22,y:13},6));
+console.log(multiplyValues({a:1,b:2,c:3},3));
+console.log(multiplyValues({j:9,i:2,x:3,z:4},10));
+console.log(multiplyValues({w:15,x:22,y:13},6));
 
 
 // Task 56
@@ -1005,7 +1014,7 @@ console.log(multiplyAB({w:15,x:22,y:13},6));
 // Swap the Javascript object's key with its values and return the resulting object
 console.log('---------------- task 56 ------------');
 
-interface Mixed {
+interface Mixed { 
     z?: string | number,
     y?: string,
     x?: string,
@@ -1057,7 +1066,7 @@ const isNull = (obj: Task57): {} => {
         arr[index2] = null;
     }
 
-    return arr;
+    return {...arr};
 }
 
 console.log(isNull({ a: 'a', b: 'b', c: '' }));
@@ -1074,6 +1083,36 @@ console.log(isNull({ a: 'a', b: 'b ', c: ' ', d: '' }));
 // Return a new object with all available properties that we are interested in
 console.log('---------------- task 58 ------------');
 
+interface Person {
+    fn: string,
+    ln: string,
+    age: number,
+    size?: number,
+    email?: string,
+    weight?: number
+}
+
+const getInfo = (obj: Person) => {
+    let newObj = (({ fn, ln, size, weight }) => ({ fn, ln, size, weight }))(obj);
+
+    for (let key in newObj) {
+        if (newObj.size === undefined) {
+            delete newObj.size;
+        }
+        if (newObj.weight === undefined) {
+            delete newObj.weight;
+        }
+    }
+    
+    // pielikt cm un kg
+
+    return newObj
+}
+
+console.log(getInfo({fn: 'Lisa', ln: 'Müller', age: 17, size: 175, weight: 67}));
+console.log(getInfo({fn: 'Martin', ln: 'Harper', age: 26, email: 'martin.harper@test.de', weight: 102}));
+console.log(getInfo({fn: 'Andrew', ln: 'Harper', age: 81, size: 175, weight: 71}));
+console.log(getInfo({fn: 'Matthew', ln: 'Müller', age: 19, email: 'matthew@mueller.de'}));
 
 
 // Task 59
@@ -1083,18 +1122,19 @@ console.log('---------------- task 58 ------------');
 // Tip: try not to mutate the original array
 console.log('---------------- task 59 ------------');
 
-// interface Task59 {
-//     city: string,
-//     country: string,
-// }
+interface Task59 {
+    city: string,
+    country: string,
+}
 
-// const addContinent = (obj: Task59[], continent: string): {}[] => {
-    
-// }
+const addContinent = (obj: Task59[], addedContinent: string) => {
+    return obj.map(state => ({
+        ...state, continent: addedContinent
+    }))
+}
 
-// console.log(addContinent([{ city: 'Tokyo', country: 'Japan' }, { city: 'Bangkok', country: 'Thailand' }], 'Asia'));
-// console.log(addContinent([{ city: 'Stockholm', country: 'Sweden' }, { city: 'Paris', country: 'France' }], 'Europe'));
-
+console.log(addContinent([{ city: 'Tokyo', country: 'Japan' }, { city: 'Bangkok', country: 'Thailand' }], 'Asia'));
+console.log(addContinent([{ city: 'Stockholm', country: 'Sweden' }, { city: 'Paris', country: 'France' }], 'Europe'));
 
 
 // Task 60 (page 26)
@@ -1104,6 +1144,26 @@ console.log('---------------- task 59 ------------');
 // The corresponding object value should be the number of times the key occurs within the array
 console.log('---------------- task 60 ------------');
 
+interface ArrObj {
+    [key: number]: number;
+  }
+
+const convertToObj = (arr: number[]) => {
+    const arrObj: ArrObj = {};
+    for (let num of arr) {
+        // Iterējot cauri arrayam, ja konkrētais cipars jau ir bijis vienreiz uzskaitīts, tad
+        // tiek pievienots 1 cipara esošajai vērtībai objektā arrObj. Bet, ja ciparu sastop pirmo reizi,
+        // tad arrObj objektā pievieno rakstzīmi ar vērtību 1.
+        arrObj[num] = arrObj[num] + 1 || 1;
+    }
+
+    return arrObj
+}
+
+console.log(convertToObj([1,2,2,3]));       // Expected {1:1,2:2,3:1}
+console.log(convertToObj([9,9,9,99]));      // Expected {9:3,99:1}
+console.log(convertToObj([4,3,2,1]));       // Expected {1:1,2:1,3:1,4:1}
+
 
 // Task 61
 // Write a function that takes two date instances as arguments
@@ -1111,11 +1171,31 @@ console.log('---------------- task 60 ------------');
 // It should return false otherwise
 console.log('---------------- task 61 ------------');
 
+const areEqual = (date1: Date, date2: Date) => {
+    return date1.getTime() === date2.getTime();
+}
+
+console.log(areEqual(new Date('2000/01/01 08:00:00'), new Date('2000/01/01 08:45:00')));
+console.log(areEqual(new Date('2000/01/01 08:00:00'), new Date('2000/01/01 08:00:00')));
+console.log(areEqual(new Date('2001/01/01 08:00:00'), new Date('2000/01/01 08:00:00')));
+
 
 // Task 62
 // Write a function that takes two date instances as argument
 // It should return the number of days that lies between those dates
 console.log('---------------- task 62 ------------');
+
+const getDays = (date1: Date, date2: Date) => {
+    if (date1.getDate() > date2.getDate()) {
+        return date1.getDate() - date2.getDate()
+    } else {
+        return Math.ceil((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
+    }
+}
+
+console.log(getDays(new Date('2020-06-11'), new Date('2020-06-01')));
+console.log(getDays(new Date('2000-01-01'), new Date('2020-06-01')));
+
 
 
 // Task 63 (page 27)
@@ -1124,9 +1204,13 @@ console.log('---------------- task 62 ------------');
 // It should return false otherwise
 console.log('---------------- task 63 ------------');
 
+const sameDay = (date1: Date, date2: Date) => date1.getDay() === date2.getDay();
 
+console.log(sameDay(new Date('2000/01/01'), new Date('2000/01/01')));
+console.log(sameDay(new Date('2000/01/01'), new Date('2000/01/02')));
+console.log(sameDay(new Date('2001/01/01'), new Date('2000/01/01')));
+console.log(sameDay(new Date('2000/11/01'), new Date('2000/01/01')));
 
-// ------spread opeators
 
 
 // Task 64
@@ -1135,8 +1219,8 @@ console.log('---------------- task 63 ------------');
 // arrays
 console.log('---------------- task 64 ------------');
 
-const combineArrays = (arr1: number[], arr2: number[]): number[] => {
-    return arr1.concat(arr2);
+const combineArrays = (arr1: number[], arr2: number[]) => {
+    return [...arr1, ...arr2]
 }
 
 console.log(combineArrays([1, 2], [3, 4]) );
@@ -1148,3 +1232,61 @@ console.log(combineArrays([1, 2], [3, 4, 5, 6]) );
 // and return an array which contains all elements from the given array
 // and the given string as the last element
 console.log('---------------- task 65 ------------');
+
+const addFruit = (fruits: string[], additionalFruit: string) => [...fruits, additionalFruit];
+
+console.log(addFruit(['Apple', 'Orange', 'Banana'], 'Kiwi'));
+
+
+// Task 66
+// Write a function that takes an array and a string as parameters 
+// and return an array which contains all elements from the given array
+// and the given string as the first element
+console.log('---------------- task 66 ------------');
+
+const addFirstFruit = (fruits: string[], additionalFruit: string) => [additionalFruit, ...fruits];
+
+console.log(addFirstFruit(['Apple', 'Orange', 'Banana'], 'Kiwi'))
+
+
+// Task 67
+// Write a function that takes two objects as parameters 
+// and return an object which contains properties from both 
+// objects
+console.log('---------------- task 67 ------------');
+
+type FirstObject = {
+    a: number,
+    b: number
+}
+type SecondObject = {
+    c: number,
+    d: number,
+    e?: number,
+    f?: number
+}
+
+const mergeObjects = (obj1: FirstObject, obj2: SecondObject) => {
+    return {...obj1, ...obj2}
+}
+
+console.log(mergeObjects({ a:1, b:2 }, { c:3, d:4 }));
+console.log(mergeObjects({ a:1, b:2 }, { c:3, d:4, e:5, f:6 }));
+
+
+// Task 68 (final)
+// Write a function that takes an object and a string as parameters 
+// and return an object which contains properties from the given object
+// and a new property favoriteMovie with the value equal to the given string
+console.log('---------------- task 68 ------------');
+
+type Properties = {
+    eyeColor: string,
+    age: number
+}
+
+const addFavoriteMovie = (obj: Properties, movie: string) => {
+    return {...obj, favoriteMovie: movie};
+}
+console.log(addFavoriteMovie({ eyeColor: 'green', age: 10 }, 'Garfield'));
+console.log(addFavoriteMovie({ eyeColor: 'blue', age: 15 }, 'Twilight'));
