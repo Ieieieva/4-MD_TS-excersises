@@ -297,21 +297,28 @@ console.log(cleanMess('down', 'nw%ot'));
 // If not, return the next higher prime number
 console.log('---------------- task 19 ------------');
 
-// const isPrime = (a: number): number => {
-//     // for (let i = 2; i < a; i++) {
-//     //     if (a % i === 0) {
-//     //         return a + 5;
-//     //     } else {
-//     //         return a;
-//     //     }
-//     // };
+const isPrime = (a: number): number => {
+    let num: number;
+    const prime = (y: number) => {
+        for (let i = 2; i < y; i++) {
+            if (y % i === 0) {
+                y++;
+                num = y;
+                prime(y);
+                break;
+            } else if (i === y - 1) {
+                num = y;
+            }
+        }
+        return num;
+    };
+    return prime(a);
+};
 
-// };
-
-// console.log(isPrime(38));
-// console.log(isPrime(7));
-// console.log(isPrime(115));
-// console.log(isPrime(2000));
+console.log(isPrime(38));
+console.log(isPrime(7));
+console.log(isPrime(115));
+console.log(isPrime(2000));
 
 
 // Task 20 (page 11)
@@ -1087,9 +1094,9 @@ interface Person {
     fn: string,
     ln: string,
     age: number,
-    size?: number,
+    size?: number | string,
     email?: string,
-    weight?: number
+    weight?: number | string
 }
 
 const getInfo = (obj: Person) => {
@@ -1103,8 +1110,13 @@ const getInfo = (obj: Person) => {
             delete newObj.weight;
         }
     }
-    
-    // pielikt cm un kg
+
+    if ("size" in newObj) {
+        newObj.size = `${obj.size}cm`
+    }
+    if ("weight" in newObj) {
+         newObj.weight = `${obj.weight}cm`
+    }
 
     return newObj
 }
